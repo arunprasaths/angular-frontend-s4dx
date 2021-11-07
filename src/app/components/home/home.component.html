@@ -1,0 +1,5 @@
+<div *ngIf="loggedInUser$ | async as user">
+    <h2>Welcome, {{ user.Name }} </h2>
+    <app-chart></app-chart>
+</div>
+

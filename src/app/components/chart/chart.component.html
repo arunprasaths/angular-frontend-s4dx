@@ -1,0 +1,12 @@
+<div>
+   <div *ngIf="chart; else loading">
+      <div id="divchart" [hidden]="!chart">
+         <canvas id="mychart"> {{ chart }}</canvas>
+      </div>
+   </div>
+   
+   
+   <ng-template #loading>
+      <p>Shows when no data, waiting for Api</p>
+   </ng-template>
+</div>

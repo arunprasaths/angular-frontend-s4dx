@@ -1,0 +1,26 @@
+
+<div *ngIf="orders$ | async as orders">
+    <h2 class="mb-2">Order Information</h2>
+    <div class="table-responsive w-100">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>Order Number</th>
+                    <th>Total Samples</th>
+                    <th>Creation Date</th>
+                    <th>Laboratory Name</th>
+                    <th>Contact</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of orders">
+                    <td>{{ order.orderNo }}</td>
+                    <td>{{ order.totalSamples }}</td>
+                    <td>{{ order.createdAt | date: 'medium' }}</td>
+                    <td>{{ order.laboratory.name }}</td>
+                    <td>{{ order.laboratory.contact }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
