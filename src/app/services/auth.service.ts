@@ -5,7 +5,7 @@ import * as moment from "moment";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { User } from '../models/User';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, map, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 
@@ -34,7 +34,8 @@ export class AuthService {
         this.decodeToken(result);
         this.setSession(result);
         return this.loggedInUser;
-      })
+      }),
+      catchError(this.handleError)
     );
   }
 
@@ -58,8 +59,6 @@ export class AuthService {
   }  
 
   public isLoggedIn() {
-    //return moment().isBefore(this.getExpiration());
-
     const token = localStorage.getItem('id_token');
     if (token) {
       return !this.helper.isTokenExpired(token);
@@ -74,13 +73,7 @@ export class AuthService {
   }
 
 
-  getExpiration() {
-    const expiration = localStorage.getItem("expires_at");
-    //const expiresAt = JSON.parse(expiration);
-    return moment(expiration);
-  }
-
-  private handleError(err: any) {
+  private handleError(err: any):Observable<any> {
     let errorMessage: string;
     if (err.error instanceof ErrorEvent) {
       errorMessage = `An error occurred: ${err.error.message}`;
@@ -88,5 +81,6 @@ export class AuthService {
       errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
     }
     console.error(err);
+    return throwError(()=> errorMessage);
   }
 }

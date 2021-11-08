@@ -1,4 +1,5 @@
 <div class="form-signin">
+  <div class="alert alert-info">To login as administrator, use "admin" as username.</div>
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
     <input formControlName="username" type="input" class="form-control" placeholder="User Name" required autofocus>

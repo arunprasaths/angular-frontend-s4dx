@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { Observable } from 'rxjs';
 import { SamplePerType } from 'src/app/models/samplespertype';
@@ -16,75 +16,43 @@ export class ChartComponent implements OnInit {
   total: any;
   chart: any = [];
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService,
+    private elementRef:ElementRef) {
     Chart.register(...registerables);
   }
 
   chartdata$: Observable<Array<SamplePerType>> = this.dataService.chartdata$;
 
   ngOnInit(): void {
-
+   
     this.chartdata$.subscribe(res => {
       this.result = res;
       this.sampleType = this.result.map((sample: SamplePerType) => sample.sampleType);
       this.total = this.result.map((sample: SamplePerType) => sample.total);
 
-      if (this.chart) {
-        this.chart = new Chart('mychart', {
-          type: 'bar',
-          data: {
-            labels: this.sampleType,
-            datasets: [
-              {
-                label: 'Total sample Types',
-                data: this.total,
-                borderWidth: 1,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)'
-              }
-            ]
-          }
-        });
-
-        // // Destroys a specific chart instance
-        this.chart.destroy();
-
-      }
-
-      this.chart = new Chart('mychart', {
-        type: 'bar',
-        data: {
-          labels: this.sampleType,
-          datasets: [
-            {
-              label: 'Total sample Types',
-              data: this.total,
-              borderWidth: 1,
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
-              borderColor: 'rgba(255, 99, 132, 1)'
-            }
-          ]
-        }
-      });
+      this.renderChart(this.sampleType,this.total);
 
     });
 
   }
 
-   removeData(chart:any) {
-    chart.data.labels.pop();
-    chart.data.datasets.forEach((dataset:any) => {
-        dataset.data.pop();
-    });
-    chart.update();
-}
+  renderChart(labels:any, data:any){
+    let htmlRef = this.elementRef.nativeElement.querySelector('#mychart');
 
- addData(chart:any, label:any, data:any) {
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset:any) => {
-        dataset.data.push(data);
+    this.chart = new Chart(htmlRef, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Total sample Types',
+            data: data,
+            borderWidth: 1,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)'
+          }
+        ]
+      }
     });
-    chart.update();
-}
-
+  }
 }

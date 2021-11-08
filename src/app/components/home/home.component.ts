@@ -10,12 +10,12 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  name: string=''; 
+  message:string = '';
+  
   constructor(private auth:AuthService) { }
 
   loggedInUser$:Observable<User> = this.auth.loggedInUserSubject$;
 
   ngOnInit(): void {
-
   }
 }

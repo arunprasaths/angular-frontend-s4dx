@@ -1,5 +1,5 @@
 
-<div *ngIf="orders$ | async as orders">
+<div *ngIf="orders$ | async as orders; else loading">
     <h2 class="mb-2">Order Information</h2>
     <div class="table-responsive w-100">
         <table class="table mb-0">
@@ -24,3 +24,6 @@
         </table>
     </div>
 </div>
+<ng-template #loading>
+    <p>waiting to load order information..</p>
+ </ng-template>
